@@ -6,7 +6,7 @@ const countryVideoMap = {
   angola: '/videos/angola.mp4',
   switzerland: '/videos/switzerland.mp4',
   ireland: '/videos/ireland.mp4',
-  thailand: '/videos/thailand.mp4',
+  thailand: '/videos/thailand2.mp4',
   india: '/videos/india.mp4',
 };
 
