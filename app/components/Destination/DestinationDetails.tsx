@@ -91,15 +91,15 @@ const DestinationDetails: React.FC<DestinationDetailsProps> = ({
     // fetchDestinationData(); // Uncomment when API is ready
   }, [parentName]);
 
-  const fetchDestinationData = async () => {
-    try {
-      // const response = await fetch(`/api/destinations/${parentName}`);
-      // const data = await response.json();
-      // setDestinations(data);
-    } catch (error) {
-      console.error('Failed to fetch destination details:', error);
-    }
-  };
+  // const fetchDestinationData = async () => {
+  //   try {
+  //     // const response = await fetch(`/api/destinations/${parentName}`);
+  //     // const data = await response.json();
+  //     // setDestinations(data);
+  //   } catch (error) {
+  //     console.error('Failed to fetch destination details:', error);
+  //   }
+  // };
 
   return (
     <div className="text-gray-800 dark:text-white">
