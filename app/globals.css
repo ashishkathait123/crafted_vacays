@@ -1,3 +1,79 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body {
+  @apply transition-colors duration-300 text-black dark:text-white;
+  background-color: white;
+}
+
+html.dark body {
+  background-color: #0f172a; /* or your preferred dark background */
+}
+
+
+:root {
+    --toastify-color-light: #fff;
+    --toastify-color-dark: #121212;
+    --toastify-color-info: #3498db;
+    --toastify-color-success: #07bc0c;
+    --toastify-color-warning: #f1c40f;
+    --toastify-color-error: #e74c3c;
+    --toastify-toast-width: 320px;
+    --toastify-toast-bd-radius: 6px;
+    --toastify-font-family: sans-serif;
+    --toastify-z-index: 9999;
+    --bs-primary: #0d6efd;
+    --bs-secondary: #6c757d;
+    --bs-success: #198754;
+    --bs-info: #0dcaf0;
+    --bs-warning: #ffc107;
+    --bs-danger: #dc3545;
+    --bs-light: #f8f9fa;
+    --bs-dark: #212529;
+    --it-ff-body: "DM Sans", sans-serif;
+    --it-common-white: #fff;
+    --it-common-black: #161b18;
+    --it-heading-primary: #161b18;
+    --it-theme-1: #11bb67;
+    --it-theme-2: #ff6525;
+}
+
+/* Apply the font and base styles */
+body {
+    font-family: var(--it-ff-body);
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+.scroll-top {
+    z-index: 1000;
+    font-size: 1.5rem;
+  }
+  
+  .scroll-top:hover {
+    background-color: #2563eb;
+  }
+  .rotate-x-0 {
+    transform: rotateX(0deg);
+  }
+  
+  .-rotate-x-90 {
+    transform: rotateX(-90deg);
+  }
+    /* globals.css */
+@keyframes fly {
+  0% {
+    transform: translateX(0) rotate(5deg);
+  }
+  50% {
+    transform: translateX(-10px) rotate(0deg);
+  }
+  100% {
+    transform: translateX(0) rotate(5deg);
+  }
+}
+
+.animate-fly {
+  animation: fly 4s ease-in-out infinite;
+}
