@@ -1,4 +1,10 @@
-export default function ReviewCard({ name, review, image }) {
+interface ReviewCardProps {
+  name: string;
+  review: string;
+  image: string;
+}
+
+export default function ReviewCard({ name, review, image }: ReviewCardProps) {
   return (
     <div className="bg-white shadow rounded-lg p-4 flex flex-col gap-4 h-full">
       <p className="text-gray-700">{review}</p>

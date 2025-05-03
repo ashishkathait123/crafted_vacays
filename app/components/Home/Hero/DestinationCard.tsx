@@ -5,11 +5,14 @@ import { Autoplay, Navigation, Scrollbar } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
+import Link from 'next/link';
 
 interface Destination {
   id: string;
-  name: string;
+  title: string;
+  slug: string;
   tours: number;
+  departures?: number;
   images: string[];
 }
 
@@ -24,7 +27,7 @@ const DestinationCards: React.FC = () => {
       console.log("Fetched Destinations:", data);
 
       setDestinations(data);
-      setCurrentImages(data.map((d) => d.images?.[0] || "/images/fallback.jpg"));
+      setCurrentImages(data.map((d) => d.images?.[0] || "/images/n1.jpg"));
     };
 
     getData();
@@ -36,7 +39,7 @@ const DestinationCards: React.FC = () => {
         prevImages.map((currentImage, index) => {
           const destination = destinations[index];
           if (!destination || !destination.images || destination.images.length === 0) {
-            return "/images/fallback.jpg";
+            return "/images/n1.jpg";
           }
           const nextIndex = (destination.images.indexOf(currentImage) + 1) % destination.images.length;
           return destination.images[nextIndex];
@@ -75,18 +78,23 @@ const DestinationCards: React.FC = () => {
             <div
               className="relative w-full h-[350px] md:h-[400px] lg:h-[450px] xl:h-[350px] rounded-2xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 bg-cover bg-center"
               style={{
-                backgroundImage: `url(${currentImages[index] || "/images/fallback.jpg"})`,
+                backgroundImage: `url(${currentImages[index] || "/images/n1.jpg"})`,
                 transition: "background-image 1s ease-in-out",
               }}
             >
-              <div className="absolute inset-0 bg-black/50 transition-transform duration-500 md:scale-100 scale-110" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center p-6">
-              <h3 className="text-lg md:text-xl font-semibold">
-  <a href={`/destination-details/${destination.slug}`} className="hover:underline">
-    {destination.title}
-  </a>
-</h3>
-                <span className="text-sm md:text-base">{destination.tours} Tours</span>
+              <div className="absolute inset-0 bg-black/50 transition-transform duration-500" />
+              
+              <span className="absolute top-3 left-3 z-10 bg-orange-500 text-white px-3 py-1 text-sm rounded">
+                {destination.tours || 0} Tours
+              </span>
+
+              <div className="absolute bottom-0 left-0 right-0 p-5 z-10 text-white">
+                <h3 className="text-lg md:text-xl font-semibold">
+                  <Link href={`/destinations/${destination.slug || destination.title.toLowerCase()}`}>
+                    {destination.title}
+                  </Link>
+                </h3>
+                <p className="text-sm">{destination.departures || 0} Departures</p>
               </div>
             </div>
           </SwiperSlide>

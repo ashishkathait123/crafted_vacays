@@ -55,7 +55,7 @@ export const destinationData = [
     packages: [
       {
         title: "Mountain Escape",
-        duration: "5N/6D",
+        duration: "58N/6D",
         itinerary: "2N Kathmandu → 3N Everest Base Camp",
         tags: ["Adventure", "Hiking"],
         hotels: 3,

@@ -1,32 +1,60 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
-import { useCurrency } from "../CurrencyContext";
 import {
   Box,
-  Chip,
   Typography,
-  Radio,
+  Chip,
   RadioGroup,
   FormControlLabel,
+  Radio,
   Button,
 } from "@mui/material";
 import HotelIcon from "@mui/icons-material/Hotel";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { useCurrency } from "../CurrencyContext";
+import {
+  FaLocationDot,
+  FaUser,
+  FaClock,
+  FaTag,
+} from "react-icons/fa6";
 
-const TourPackageCard = ({ packageData }) => {
+interface TourPackageProps {
+  packageData: {
+    title: string;
+    location: string;
+    tourType: string;
+    guests: string;
+    duration: string;
+    discountedPrice: string;
+    originalPrice: string;
+    tags?: string[];
+    itinerary?: string;
+    images?: string[];
+    thumbnail?: string;
+  };
+  onClick: () => void;
+}
+
+const TourPackageCard: React.FC<TourPackageProps> = ({ packageData, onClick }) => {
   const { convertPrice, currencySymbol } = useCurrency();
   const [selectedHotel, setSelectedHotel] = useState("3");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [imageErrorFlags, setImageErrorFlags] = useState<boolean[]>([]);
+
+  if (!packageData) return <div>Loading...</div>;
 
   const images =
-    Array.isArray(packageData.images) && packageData.images.length
+    packageData.images && packageData.images.length > 0
       ? packageData.images
       : ["/images/bg.jpg"];
 
-  // Auto Image Change
+  useEffect(() => {
+    setImageErrorFlags(new Array(images.length).fill(false));
+  }, [images.length]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -34,13 +62,26 @@ const TourPackageCard = ({ packageData }) => {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  // Calculate Price Based on Hotel Type
-  const calculatePrice = () => {
-    let basePrice = parseFloat(packageData.discountedPrice) || 0;
+  const handleImageError = (index: number) => {
+    const updatedFlags = [...imageErrorFlags];
+    updatedFlags[index] = true;
+    setImageErrorFlags(updatedFlags);
+  };
 
+  const parsePrice = (price: string) => {
+    const numericPrice = parseFloat(price.replace(/[^0-9.-]+/g, ""));
+    return isNaN(numericPrice) ? 0 : numericPrice;
+  };
+
+  const safePrice = (price: number) => (isNaN(price) || price <= 0 ? 0 : price);
+
+  const originalPriceNum = parsePrice(packageData.originalPrice);
+  const discountedPriceNum = parsePrice(packageData.discountedPrice);
+
+  const calculatePrice = () => {
+    let basePrice = safePrice(discountedPriceNum);
     if (selectedHotel === "4") return convertPrice(Math.round(basePrice * 1.2));
     if (selectedHotel === "5") return convertPrice(Math.round(basePrice * 1.5));
-
     return convertPrice(basePrice);
   };
 
@@ -52,14 +93,16 @@ const TourPackageCard = ({ packageData }) => {
         overflow: "hidden",
         width: "100%",
         maxWidth: 400,
-        height: 450,
+        height: 480,
         color: "white",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         p: 3,
         boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
-        backgroundImage: `url(${images[currentImageIndex]})`,
+        backgroundImage: `url(${
+          imageErrorFlags[currentImageIndex] ? "/images/bg.jpg" : images[currentImageIndex]
+        })`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         transition: "background-image 1s ease-in-out, transform 0.5s ease",
@@ -73,12 +116,13 @@ const TourPackageCard = ({ packageData }) => {
           width: "100%",
           height: "100%",
           background: "rgba(0, 0, 0, 0.5)",
+          zIndex: 1,
         },
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Image Navigation Dots */}
+      {/* Image Dots */}
       <Box
         sx={{
           position: "absolute",
@@ -93,12 +137,12 @@ const TourPackageCard = ({ packageData }) => {
         {images.map((_, index) => (
           <Box
             key={index}
+            component="span"
             sx={{
               width: 8,
               height: 8,
               borderRadius: "50%",
-              backgroundColor:
-                index === currentImageIndex ? "white" : "rgba(255,255,255,0.5)",
+              backgroundColor: index === currentImageIndex ? "white" : "rgba(255,255,255,0.5)",
               cursor: "pointer",
               transition: "background-color 0.3s",
             }}
@@ -107,13 +151,13 @@ const TourPackageCard = ({ packageData }) => {
         ))}
       </Box>
 
-      {/* Top Section */}
+      {/* Header Info */}
       <Box sx={{ position: "relative", zIndex: 2, mb: 1 }}>
-        <Box sx={{ display: "flex", gap: 1 }}>
-          {(packageData.tags || []).map((tag, index) => (
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          {packageData.tags?.map((tag, index) => (
             <Chip
               key={index}
-              icon={<LocalOfferIcon sx={{ color: "white" }} />}
+              icon={<FaTag color="white" size={12} />}
               label={`#${tag}`}
               sx={{
                 bgcolor: "rgba(255,255,255,0.3)",
@@ -127,22 +171,25 @@ const TourPackageCard = ({ packageData }) => {
         <Typography variant="h6" sx={{ mt: 1, fontWeight: "bold" }}>
           {packageData.title}
         </Typography>
-        <Typography
-          variant="body2"
-          sx={{ display: "flex", alignItems: "center", gap: 1 }}
-        >
-          <AccessTimeIcon fontSize="small" /> {packageData.duration}
+        <Typography variant="body2" sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }}>
+          <FaLocationDot /> {packageData.location}
+        </Typography>
+        <Typography variant="body2" sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }}>
+          🧭 {packageData.tourType}
+        </Typography>
+        <Typography variant="body2" sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }}>
+          <FaUser /> {packageData.guests}
+        </Typography>
+        <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <FaClock /> {packageData.duration}
         </Typography>
       </Box>
 
-      {/* Hotel Type Selection */}
-      <Box
-        sx={{ position: "relative", zIndex: 2, textAlign: "center", mb: 2 }}
-      >
+      {/* Itinerary + Hotel Selector */}
+      <Box sx={{ position: "relative", zIndex: 2, textAlign: "center", mb: 2 }}>
         <Typography variant="body2" sx={{ fontStyle: "italic" }}>
-          {packageData.itinerary}
+          {packageData.itinerary || "No itinerary available"}
         </Typography>
-
         <Typography variant="body1" sx={{ mt: 1, fontWeight: "bold" }}>
           Hotel Type
         </Typography>
@@ -153,9 +200,9 @@ const TourPackageCard = ({ packageData }) => {
           onChange={(e) => setSelectedHotel(e.target.value)}
           sx={{ justifyContent: "center" }}
         >
-          {["3", "4", "5"].map((rating, index) => (
+          {["3", "4", "5"].map((rating) => (
             <FormControlLabel
-              key={index}
+              key={rating}
               value={rating}
               control={<Radio sx={{ color: "white" }} />}
               label={
@@ -171,14 +218,10 @@ const TourPackageCard = ({ packageData }) => {
         </RadioGroup>
       </Box>
 
-      {/* Pricing Section */}
+      {/* Pricing */}
       <Box sx={{ position: "relative", zIndex: 2, textAlign: "center", mb: 2 }}>
-        <Typography
-          variant="body2"
-          sx={{ textDecoration: "line-through", opacity: 0.7 }}
-        >
-          {currencySymbol}{" "}
-          {convertPrice(parseFloat(packageData.originalPrice) || 0) || "N/A"}
+        <Typography variant="body2" sx={{ textDecoration: "line-through", opacity: 0.7 }}>
+          {currencySymbol} {convertPrice(safePrice(originalPriceNum))}
         </Typography>
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {currencySymbol} {calculatePrice()}
@@ -188,7 +231,7 @@ const TourPackageCard = ({ packageData }) => {
         </Typography>
       </Box>
 
-      {/* CTA Button */}
+      {/* CTA */}
       <Button
         variant="contained"
         color="warning"
@@ -202,6 +245,7 @@ const TourPackageCard = ({ packageData }) => {
             transform: "scale(1.05)",
           },
         }}
+        onClick={onClick}
       >
         Plan Now
       </Button>

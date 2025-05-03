@@ -77,3 +77,39 @@ body {
 .animate-fly {
   animation: fly 4s ease-in-out infinite;
 }
+
+/* styles/globals.css or styles/Carousel.module.css */
+
+.gallery-carousel-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Add custom styles for navigation arrows and pagination dots */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff; /* Change the color of navigation arrows */
+}
+
+.swiper-pagination-bullet {
+  background-color: #fff; /* Change color of pagination bullets */
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #3498db; /* Active bullet color */
+}

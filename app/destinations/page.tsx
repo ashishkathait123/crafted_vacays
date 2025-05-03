@@ -18,7 +18,7 @@ const AllDestinations = () => {
       console.log('Fetched Destinations:', data);
 
       setDestinations(data);
-      setCurrentImages(data.map((d) => d.images?.[0] || '/images/fallback.jpg'));
+      setCurrentImages(data.map((d) => d.images?.[0] || '/images/n1.jpg'));
     };
     
     getData();
@@ -28,7 +28,7 @@ const AllDestinations = () => {
     const interval = setInterval(() => {
       setCurrentImages((prevImages) =>
         prevImages.map((img, i) => {
-          const images = destinations[i]?.images || ['/images/placeholder.jpg'];
+          const images = destinations[i]?.images || ['/images/d3.jpg'];
           const currentIndex = images.indexOf(img);
           const nextIndex = (currentIndex + 1) % images.length;
           return images[nextIndex];

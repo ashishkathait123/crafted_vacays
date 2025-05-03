@@ -102,18 +102,18 @@ const CustomerTestimonials = () => {
           >
             {testimonialData.map((item, idx) => (
               <SwiperSlide key={idx}>
-               {item.type === 'video' && (
-  <div className="relative overflow-hidden rounded-xl shadow-lg">
-    <iframe
-      src={`https://www.youtube.com/embed/${item.videoUrl.split('v=')[1]}?rel=0&showinfo=0&autoplay=1&mute=1&loop=1&playlist=${item.videoUrl.split('v=')[1]}`}
-      title="Customer Video"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-      className="w-full h-[250px] sm:h-[280px] rounded-xl"
-    ></iframe>
-  </div>
-)}
+                {item.type === 'video' && item.videoUrl && (
+                  <div className="relative overflow-hidden rounded-xl shadow-lg">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${item.videoUrl.split('v=')[1]}?rel=0&showinfo=0&autoplay=1&mute=1&loop=1&playlist=${item.videoUrl.split('v=')[1]}`}
+                      title="Customer Video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-[250px] sm:h-[280px] rounded-xl"
+                    ></iframe>
+                  </div>
+                )}
                 {item.type === 'image' && (
                   <div className="h-full">
                     <img

@@ -1,25 +1,15 @@
 "use client";
-import React, { useState,useEffect } from "react";
-
-import {
-  FaPhoneAlt,
-  FaEnvelope,
-  FaMapMarkerAlt,
-  FaFacebookF,
-  FaTwitter,
-  FaSkype,
-  FaLinkedin,
-  FaChevronDown,
-  FaChevronUp,
-} from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaTwitter, FaSkype, FaLinkedin, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useCurrency } from "../CurrencyContext";
 
 const Header: React.FC = () => {
   const { currency, setCurrency } = useCurrency();
-  const currencies = ["USD", "EUR", "GBP", "INR"];
+  const currencies: ("USD" | "EUR" | "GBP" | "INR")[] = ["USD", "EUR", "GBP", "INR"];
   const [showOptions, setShowOptions] = useState(false);
   const [hideHeader, setHideHeader] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -36,12 +26,10 @@ const Header: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
   return (
-<header
-      className={`fixed top-0 left-0 w-full z-[9999] bg-black text-white transition-transform duration-300 ${
-        hideHeader ? "-translate-y-full" : "translate-y-0"
-      }`}
-    >      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center space-y-3 lg:space-y-0">
+    <header className={`fixed top-0 left-0 w-full z-[9999] bg-black text-white transition-transform duration-300 ${hideHeader ? "-translate-y-full" : "translate-y-0"}`}>
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center space-y-3 lg:space-y-0">
         {/* Contact Info */}
         <div className="hidden md:flex items-center space-x-6 text-sm">
           <div className="flex items-center space-x-2">
@@ -60,27 +48,19 @@ const Header: React.FC = () => {
 
         {/* Mobile Toggle */}
         <div className="lg:hidden w-full flex justify-center">
-          <button
-            onClick={() => setShowOptions(!showOptions)}
-            className="flex items-center space-x-2 text-sm font-medium text-orange-500 hover:underline focus:outline-none"
-            aria-expanded={showOptions}
-          >
+          <button onClick={() => setShowOptions(!showOptions)} className="flex items-center space-x-2 text-sm font-medium text-orange-500 hover:underline focus:outline-none" aria-expanded={showOptions}>
             <span>Options</span>
             {showOptions ? <FaChevronUp /> : <FaChevronDown />}
           </button>
         </div>
 
         {/* Always render: hide with Tailwind if needed */}
-        <div
-          className={`w-full lg:w-auto flex-col lg:flex-row lg:flex lg:items-center lg:space-x-4 space-y-2 lg:space-y-0 mt-2 lg:mt-0 ${
-            showOptions ? "flex" : "hidden lg:flex"
-          }`}
-        >
+        <div className={`w-full lg:w-auto flex-col lg:flex-row lg:flex lg:items-center lg:space-x-4 space-y-2 lg:space-y-0 mt-2 lg:mt-0 ${showOptions ? "flex" : "hidden lg:flex"}`}>
           {/* Currency */}
           <div className="relative">
             <select
               value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
+              onChange={(e) => setCurrency(e.target.value as "INR" | "USD" | "EUR" | "GBP")}
               className="bg-orange-500 text-white border border-gray-600 px-2 py-1 rounded text-sm cursor-pointer"
             >
               {currencies.map((cur) => (
@@ -90,16 +70,6 @@ const Header: React.FC = () => {
               ))}
             </select>
           </div>
-
-          {/* Language */}
-          {/* <div className="flex items-center space-x-2 text-sm">
-            <img
-              src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-lang.0e03c3ba.png&w=16&q=75"
-              alt="English"
-              className="w-4 h-4"
-            />
-            <span>English</span>
-          </div> */}
 
           {/* Social Icons */}
           <div className="flex space-x-3 text-sm">

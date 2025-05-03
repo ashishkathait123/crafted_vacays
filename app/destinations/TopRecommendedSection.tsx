@@ -7,7 +7,7 @@ import { Navigation } from 'swiper/modules';
 import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-
+import { recommendedItems } from '../components/data/dummyData1'; // adjust the path as needed
 type RecommendedItem = {
   image: string;
   title: string;
@@ -15,13 +15,11 @@ type RecommendedItem = {
 
 type TopRecommendedSectionProps = {
   destination: string;
-  recommended: RecommendedItem[];
+  recommended?: RecommendedItem[]; // ✅ optional now
 };
-
 const TopRecommendedSection: React.FC<TopRecommendedSectionProps> = ({
   destination,
-  recommended,
-}) => {
+  recommended = recommendedItems,}) => {
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const [isSwiperReady, setSwiperReady] = useState(false);

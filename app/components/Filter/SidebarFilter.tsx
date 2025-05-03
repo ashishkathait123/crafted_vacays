@@ -45,7 +45,7 @@ const SidebarFilter = ({ filters, onFilterChange }: any) => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="w-full bg-white dark:bg-gray-900 rounded-md shadow-lg p-4 space-y-6"
+      className="w-full bg-white dark:bg-gray-900 rounded-md shadow-lg p-4 space-y-6 sm:w-80 md:w-96 lg:w-1/4 xl:w-1/4"
     >
       {/* Price Slider */}
       <motion.div whileHover={{ scale: 1.02 }}>
@@ -57,7 +57,7 @@ const SidebarFilter = ({ filters, onFilterChange }: any) => {
         <FilterSection
           title="Duration"
           options={['0-3 hours', '3-5 hours', '5-7 hours', 'Full day (7+ hours)', 'Multi-day']}
-          selectedOptions={localFilters.duration}
+          selectedOptions={localFilters.duration || []} // Default to empty array
           onChange={(value: string) => handleCheckboxChange('duration', value)}
         />
       </motion.div>
@@ -67,7 +67,7 @@ const SidebarFilter = ({ filters, onFilterChange }: any) => {
         <FilterSection
           title="Language"
           options={['English', 'Dutch', 'German', 'French', 'Italian']}
-          selectedOptions={localFilters.language}
+          selectedOptions={localFilters.language || []} // Default to empty array
           onChange={(value: string) => handleCheckboxChange('language', value)}
         />
       </motion.div>
@@ -101,7 +101,7 @@ const SidebarFilter = ({ filters, onFilterChange }: any) => {
                 >
                   <input
                     type="checkbox"
-                    checked={localFilters.rating?.includes(rating)}
+                    checked={localFilters.rating?.includes(rating)} // Default to empty array
                     onChange={() => handleRatingChange(rating)}
                     className="accent-yellow-400 w-4 h-4"
                   />
@@ -128,8 +128,18 @@ const SidebarFilter = ({ filters, onFilterChange }: any) => {
         <FilterSection
           title="Specials"
           options={['Deals & Discounts', 'Free Cancellation', 'Likely to Sell Out', 'Skip-The-Line']}
-          selectedOptions={localFilters.specials}
+          selectedOptions={localFilters.specials || []} // Default to empty array
           onChange={(value: string) => handleCheckboxChange('specials', value)}
+        />
+      </motion.div>
+
+      {/* Cities Filter */}
+      <motion.div whileHover={{ scale: 1.02 }}>
+        <FilterSection
+          title="Cities"
+          options={['Paris', 'Rome', 'Amsterdam', 'Kathmandu', 'Bali']}
+          selectedOptions={localFilters.cities || []} // Default to empty array
+          onChange={(value: string) => handleCheckboxChange('cities', value)}
         />
       </motion.div>
     </motion.div>

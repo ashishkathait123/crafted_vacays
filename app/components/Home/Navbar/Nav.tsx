@@ -8,7 +8,7 @@ import { useDestination } from "../../../destinations/DestinationContext";
 import { Moon, Sun } from "lucide-react";
 
 const Navbar = () => {
-  const [dropdown, setDropdown] = useState(null);
+  const [dropdown, setDropdown] = useState<string | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const { destinationName } = useDestination();
 
@@ -48,10 +48,18 @@ const Navbar = () => {
           <nav className="hidden xl:flex space-x-6 z-50">
   {[
     { label: "Home", links: ["Home"] },
-    { label: "Tours", links: ["Tour Details", "Booking"] },
-    { label: "Destination", links: ["Destination", "Details"] },
-    { label: "Pages", links: ["About", ] },
-    // { label: "Blog", links: ["Blog Standard", "Blog Details"] },
+    // { label: "Tours", links: ["Tour Details", "Booking"] },
+    {
+      label: "Destination",
+      links: [
+        "Destination",
+        // "Details",
+        "India",
+        "Abroad",
+        "Neighbouring Countries",
+      ],
+    },
+    { label: "Pages", links: ["About"] },
   ].map((menu, index) => (
     <div
       key={index}
@@ -59,7 +67,7 @@ const Navbar = () => {
       onMouseEnter={() => setDropdown(menu.label)}
       onMouseLeave={() => setDropdown(null)}
     >
-      <button className="text-black font-medium px-3 py-1 flex items-center transition duration-300 rounded-md group-hover:bg-orange-500">
+      <button className="text-black font-medium px-3 py-1 flex items-center transition duration-300 z-50 rounded-md group-hover:bg-orange-500">
         {menu.label}
         <FaChevronDown
           className={`ml-2 transition-transform duration-300 ${
@@ -76,11 +84,15 @@ const Navbar = () => {
       >
         {menu.links.map((link, i) => {
           const getPath = () => {
-            if (link === "Details") return "/destinations/thailand"; // <- Dynamic detail slug
-            if (link === "About") return "/about-us"; // <-- This line
-            // if (link === "Home") return "/"; // <-- This line
-
+            if (link === "Home") return "/";
+            // if (link === "Tour Details") return "/tours/details";
+            if (link === "Booking") return "/tours/booking";
             if (link === "Destination") return "/destinations";
+            if (link === "Details") return "/destinations/thailand"; // example detail page
+            if (link === "India") return "/destinations/india";
+            if (link === "Abroad") return "/destinations/abroad";
+            if (link === "Neighbouring Countries") return "/destinations/neighbouring-countries";
+            if (link === "About") return "/about-us";
             return "#";
           };
 

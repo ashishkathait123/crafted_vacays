@@ -1,31 +1,47 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
-const CurrencyContext = createContext(null);
+// 1. Define the structure of context
+interface CurrencyContextType {
+  currency: keyof typeof exchangeRates; // Use 'keyof' to restrict the currency to valid keys
+  setCurrency: (currency: keyof typeof exchangeRates) => void;
+  convertPrice: (amount: number | string) => number;
+  currencySymbol: string;
+}
 
+// 2. Create context with proper type
+const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
+
+// 3. Define props for the provider
+interface CurrencyProviderProps {
+  children: ReactNode;
+}
+
+// 4. Exchange rates
 const exchangeRates = {
   INR: { rate: 1, symbol: "₹" },
   USD: { rate: 0.012, symbol: "$" },
-  EUR: { rate: 0.011, symbol: "€" }
+  EUR: { rate: 0.011, symbol: "€" },
+  GBP: { rate: 0.009, symbol: "£" }, // Added GBP here
 };
 
-export const CurrencyProvider = ({ children }) => {
-  const [currency, setCurrency] = useState("INR"); // Default currency
 
-  // Updated convertPrice function with safeguards
-  const convertPrice = (amount) => {
-    if (!amount) return 0; // Handle empty values safely
+// 5. CurrencyProvider component
+export const CurrencyProvider = ({ children }: CurrencyProviderProps) => {
+  const [currency, setCurrency] = useState<keyof typeof exchangeRates>("INR"); // Default currency
 
-    // Remove any non-numeric characters (like ₹, $, €, etc.)
+  const convertPrice = (amount: number | string): number => {
+    if (!amount) return 0;
+
     const numericAmount = parseFloat(amount.toString().replace(/[^0-9.]/g, ""));
 
     if (isNaN(numericAmount)) {
       console.error("Invalid amount passed to convertPrice:", amount);
-      return 0; // Return 0 instead of NaN
+      return 0;
     }
 
-    return numericAmount * (exchangeRates[currency]?.rate || 1);
+    return numericAmount * (exchangeRates[currency]?.rate || 1); // Now TypeScript knows 'currency' is a key
   };
 
   return (
@@ -34,7 +50,7 @@ export const CurrencyProvider = ({ children }) => {
         currency,
         setCurrency,
         convertPrice,
-        currencySymbol: exchangeRates[currency]?.symbol || "₹"
+        currencySymbol: exchangeRates[currency]?.symbol || "₹",
       }}
     >
       {children}
@@ -42,4 +58,11 @@ export const CurrencyProvider = ({ children }) => {
   );
 };
 
-export const useCurrency = () => useContext(CurrencyContext);
+// 6. useCurrency custom hook
+export const useCurrency = () => {
+  const context = useContext(CurrencyContext);
+  if (context === undefined) {
+    throw new Error("useCurrency must be used within a CurrencyProvider");
+  }
+  return context;
+};

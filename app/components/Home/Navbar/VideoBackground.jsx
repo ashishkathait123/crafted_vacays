@@ -6,7 +6,7 @@ const countryVideoMap = {
   angola: '/videos/angola.mp4',
   switzerland: '/videos/switzerland.mp4',
   ireland: '/videos/ireland.mp4',
-  thailand: '/videos/thailand2.mp4',
+  abroad: '/videos/thailand 1.mp4',
   india: '/videos/india.mp4',
 };
 
@@ -23,7 +23,7 @@ const VideoBackground = () => {
   useEffect(() => {
     if (destinationName) {
       const key = destinationName.toLowerCase();
-      setVideoSrc(countryVideoMap[key] || '/videos/default.mp4');
+      setVideoSrc(countryVideoMap[key] || '/videos/hero1.mp4');
     } else {
       setVideoSrc('/videos/hero1.mp4');
     }
