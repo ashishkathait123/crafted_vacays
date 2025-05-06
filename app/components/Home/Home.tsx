@@ -9,7 +9,7 @@ import TourPackage from "../tour/HeroTourSlider";
 import VideoSection from "./VideoSection";
 import TopRecommendedSection from "@/app/destinations/TopRecommendedSection";// Scroll Animation Variants
 import SearchAndPackages from "../tour/SearchAndPackages/SearchAndPackages";
-import DescriptionBox from "@/app/firstview/info/DescriptionBox";
+// import DescriptionBox from "@/app/firstview/info/DescriptionBox";
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },

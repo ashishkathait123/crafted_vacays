@@ -146,7 +146,7 @@ const Navbar = () => {
       <section className="relative h-screen overflow-auto bg-cover bg-center">
   <div
     className="absolute bottom-10 top-1/2 right-6 z-10 w-[400px] max-w-[90%]"
-  >
+  > 
     <ItineraryForm />
   </div>
 </section>
